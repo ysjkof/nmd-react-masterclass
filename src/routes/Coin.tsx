@@ -31,6 +31,21 @@ const Header = styled.header`
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
+  position: relative;
+  button {
+    position: absolute;
+    right: 0;
+    color: inherit;
+    padding: 8px 14px;
+    font-weight: 400;
+    border-radius: 10px;
+    background-color: rgba(0, 0, 0, 0.5);
+    :hover {
+      color: ${(props) => props.theme.accentColor};
+      cursor: pointer;
+    }
+  }
 `;
 
 const Overview = styled.div`
@@ -108,7 +123,7 @@ interface InfoData {
   last_data_at: string;
 }
 
-interface PriceData {
+export interface PriceData {
   id: string;
   name: string;
   symbol: string;
@@ -169,6 +184,11 @@ function Coin() {
         <Title>
           {state?.name ? state.name : loading ? "Loading..." : infoData?.name}
         </Title>
+        <button>
+          <Link to={{ pathname: "/" }}>
+            <span>뒤로가기</span>
+          </Link>
+        </button>
       </Header>
       {loading ? (
         <Loader>Loading...</Loader>
@@ -199,7 +219,6 @@ function Coin() {
               <span>{tickersData?.max_supply}</span>
             </OverviewItem>
           </Overview>
-
           <Tabs>
             <Tab isActive={chartMatch !== null}>
               <Link to={`/${coinId}/chart`}>Chart</Link>

@@ -61,7 +61,6 @@ function Coins() {
   const { isLoading, data } = useQuery<ICoin[]>("allCoins", fetchCoins);
   return (
     <Container>
-      {" "}
       <Helmet>
         <title>코인</title>
       </Helmet>
