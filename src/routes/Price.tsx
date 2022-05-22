@@ -2,6 +2,7 @@ import { useQuery } from "react-query";
 import { useOutletContext } from "react-router-dom";
 import styled from "styled-components";
 import { fetchCoinTickers } from "../api";
+import { ChartProps } from "./Chart";
 import { PriceData } from "./Coin";
 
 const Ul = styled.ul`
@@ -15,11 +16,8 @@ const Li = styled.li`
   padding: 8px 0;
 `;
 
-interface ChartProps {
-  coinId: string;
-}
 function Price() {
-  const { coinId } = useOutletContext<ChartProps>();
+  const { coinId, isDark } = useOutletContext<ChartProps>();
   const { isLoading, data } = useQuery<PriceData>(
     ["tickers", coinId],
     () => fetchCoinTickers(coinId),

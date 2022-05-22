@@ -9,6 +9,7 @@ import {
 } from "react-router-dom";
 import styled from "styled-components";
 import { fetchCoinInfo, fetchCoinTickers } from "../api";
+import { RoutersProps } from "../Routers";
 
 const Title = styled.h1`
   font-size: 48px;
@@ -157,7 +158,7 @@ export interface PriceData {
   };
 }
 
-function Coin() {
+function Coin({ isDark, toggleDark }: RoutersProps) {
   const { coinId } = useParams<keyof RouteParams>() as RouteParams;
   const location = useLocation();
   const state = location.state as RouteState;
@@ -227,7 +228,7 @@ function Coin() {
               <Link to={`/${coinId}/price`}>Price</Link>
             </Tab>
           </Tabs>
-          <Outlet context={{ coinId }} />
+          <Outlet context={{ coinId, isDark }} />
         </>
       )}
     </Container>
