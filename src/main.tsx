@@ -1,20 +1,19 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { HelmetProvider } from "react-helmet-async";
-import { QueryClient, QueryClientProvider } from "react-query";
 import { RecoilRoot } from "recoil";
+import { ThemeProvider } from "styled-components";
 import App from "./App";
-
-const queryClient = new QueryClient();
+import { darkTheme } from "./theme";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <RecoilRoot>
-      <HelmetProvider>
-        <QueryClientProvider client={queryClient}>
+      <ThemeProvider theme={darkTheme}>
+        <HelmetProvider>
           <App />
-        </QueryClientProvider>
-      </HelmetProvider>
+        </HelmetProvider>
+      </ThemeProvider>
     </RecoilRoot>
   </React.StrictMode>
 );
