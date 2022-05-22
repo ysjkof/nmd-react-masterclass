@@ -17,7 +17,7 @@ const Li = styled.li`
 `;
 
 function Price() {
-  const { coinId, isDark } = useOutletContext<ChartProps>();
+  const { coinId } = useOutletContext<ChartProps>();
   const { isLoading, data } = useQuery<PriceData>(
     ["tickers", coinId],
     () => fetchCoinTickers(coinId),

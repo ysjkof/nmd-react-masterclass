@@ -2,7 +2,9 @@ import { useQuery } from "react-query";
 import { useOutletContext } from "react-router-dom";
 import { fetchCoinHistory } from "../api";
 import ApexChart from "react-apexcharts";
-import { RoutersProps } from "../Routers";
+import { RoutersProps } from "../Router";
+import { isDarkAtom } from "../atoms";
+import { useRecoilValue } from "recoil";
 
 interface IHistorical {
   time_open: string;
@@ -15,11 +17,13 @@ interface IHistorical {
   market_cap: number;
 }
 
-export interface ChartProps extends Pick<RoutersProps, "isDark"> {
+export interface ChartProps {
   coinId: string;
 }
 function Chart() {
-  const { coinId, isDark } = useOutletContext<ChartProps>();
+  const isDark = useRecoilValue(isDarkAtom);
+  const { coinId } = useOutletContext<ChartProps>();
+
   const { isLoading, data } = useQuery<IHistorical[]>(
     ["ohlcv", coinId],
     () => fetchCoinHistory(coinId),
