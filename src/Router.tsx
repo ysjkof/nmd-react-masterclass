@@ -8,7 +8,7 @@ export interface RoutersProps {
   isDark: boolean;
   toggleDark: () => void;
 }
-function Routers({ isDark, toggleDark }: RoutersProps) {
+function Router({ isDark, toggleDark }: RoutersProps) {
   const { coinId } = useParams();
   return (
     <BrowserRouter>
@@ -29,4 +29,4 @@ function Routers({ isDark, toggleDark }: RoutersProps) {
   );
 }
 
-export default Routers;
+export default Router;
