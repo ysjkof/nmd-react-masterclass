@@ -1,35 +1,19 @@
 import { atom, selector } from "recoil";
 
-export enum Categories {
-  "TO_DO" = "TO_DO",
-  "DOING" = "DOING",
-  "DONE" = "DONE",
-}
-export interface IToDo {
-  text: string;
-  id: number;
-  category: Categories;
-}
-
-export const categoryState = atom<Categories>({
-  key: "category",
-  default: Categories.TO_DO,
+export const minuteState = atom({
+  key: "minutes",
+  default: 0,
 });
 
-export const LOCAL_TO_DO_STATE_KEY = "toDos";
-const localToDoState = localStorage.getItem(LOCAL_TO_DO_STATE_KEY);
-
-export const toDoState = atom<IToDo[]>({
-  key: "toDo",
-  default: localToDoState ? JSON.parse(localToDoState) : [],
-});
-
-// selector는 atom의 state 원본을 변형하지 않고 원본을 토대로 가공한 데이터를 사용하기 위한 목적
-export const toDoSelector = selector({
-  key: "toDoSelector",
+export const hourSelector = selector<number>({
+  key: "hours",
   get: ({ get }) => {
-    const toDos = get(toDoState);
-    const category = get(categoryState);
-    return toDos.filter((toDo) => toDo.category === category);
+    const minutes = get(minuteState);
+    return minutes / 60;
+  },
+  set: ({ set }, newValue) => {
+    const minutes = Number(newValue) * 60;
+    // set(바꿀 atom, 바꿀 값)
+    set(minuteState, minutes);
   },
 });
