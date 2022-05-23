@@ -16,9 +16,12 @@ export const categoryState = atom<Categories>({
   default: Categories.TO_DO,
 });
 
+export const LOCAL_TO_DO_STATE_KEY = "toDos";
+const localToDoState = localStorage.getItem(LOCAL_TO_DO_STATE_KEY);
+
 export const toDoState = atom<IToDo[]>({
   key: "toDo",
-  default: [],
+  default: localToDoState ? JSON.parse(localToDoState) : [],
 });
 
 // selector는 atom의 state 원본을 변형하지 않고 원본을 토대로 가공한 데이터를 사용하기 위한 목적

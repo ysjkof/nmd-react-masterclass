@@ -1,6 +1,6 @@
 import React from "react";
 import { useSetRecoilState } from "recoil";
-import { Categories, IToDo, toDoState } from "../atoms";
+import { Categories, IToDo, LOCAL_TO_DO_STATE_KEY, toDoState } from "../atoms";
 
 function ToDo({ text, category, id }: IToDo) {
   const setToDos = useSetRecoilState(toDoState);
@@ -9,33 +9,57 @@ function ToDo({ text, category, id }: IToDo) {
       currentTarget: { name },
     } = event;
     setToDos((oldToDos) => {
+      let newState = [];
       const targetIndex = oldToDos.findIndex((toDo) => toDo.id === id);
-      const newToDo = { text, id, category: name as IToDo["category"] };
-      return [
-        ...oldToDos.slice(0, targetIndex),
-        newToDo,
-        ...oldToDos.slice(targetIndex + 1),
-      ];
+      if (name === "Delete") {
+        newState = oldToDos.filter(
+          (toDo) => toDo.id !== oldToDos[targetIndex].id
+        );
+      } else {
+        const newToDo = { text, id, category: name as IToDo["category"] };
+        newState = [
+          ...oldToDos.slice(0, targetIndex),
+          newToDo,
+          ...oldToDos.slice(targetIndex + 1),
+        ];
+      }
+      localStorage.setItem(LOCAL_TO_DO_STATE_KEY, JSON.stringify(newState));
+      return newState;
     });
   };
   return (
     <li>
       <span>{text}</span>
       {category !== Categories.DOING && (
-        <button name={Categories.DOING} onClick={onClick}>
+        <button
+          style={{ marginLeft: "8px" }}
+          name={Categories.DOING}
+          onClick={onClick}
+        >
           Doing
         </button>
       )}
       {category !== Categories.TO_DO && (
-        <button name={Categories.TO_DO} onClick={onClick}>
+        <button
+          style={{ marginLeft: "8px" }}
+          name={Categories.TO_DO}
+          onClick={onClick}
+        >
           To Do
         </button>
       )}
       {category !== Categories.DONE && (
-        <button name={Categories.DONE} onClick={onClick}>
+        <button
+          style={{ marginLeft: "8px" }}
+          name={Categories.DONE}
+          onClick={onClick}
+        >
           Done
         </button>
       )}
+      <button style={{ marginLeft: "8px" }} name="Delete" onClick={onClick}>
+        Delete
+      </button>
     </li>
   );
 }
