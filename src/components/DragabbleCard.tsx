@@ -1,6 +1,8 @@
 import React from "react";
 import { Draggable } from "react-beautiful-dnd";
+import { useSetRecoilState } from "recoil";
 import styled from "styled-components";
+import { LOCAL_STORAGE_TO_DOS, toDoState } from "../atoms";
 
 const Card = styled.div<{ isDragging: boolean }>`
   border-radius: 5px;
@@ -10,15 +12,34 @@ const Card = styled.div<{ isDragging: boolean }>`
     props.isDragging ? "#e4f2ff" : props.theme.cardColor};
   box-shadow: ${(props) =>
     props.isDragging ? "0px 2px 5px rgba(0, 0, 0, 0.05)" : "none"};
+  display: flex;
+  justify-content: space-between;
 `;
 
 interface IDragabbleCardProps {
   toDoId: number;
   toDoText: string;
   index: number;
+  boardId: string;
 }
 
-function DragabbleCard({ toDoId, toDoText, index }: IDragabbleCardProps) {
+function DragabbleCard({
+  toDoId,
+  toDoText,
+  index,
+  boardId,
+}: IDragabbleCardProps) {
+  const setToDos = useSetRecoilState(toDoState);
+  const onClick = (toDoId: number, magic: any) =>
+    setToDos((prevToDos) => {
+      const newToDos = {
+        ...prevToDos,
+        [boardId]: prevToDos[boardId].filter((todo) => todo.id !== toDoId),
+      };
+      localStorage.setItem(LOCAL_STORAGE_TO_DOS, JSON.stringify(newToDos));
+      return newToDos;
+    });
+
   return (
     <Draggable draggableId={toDoId + ""} index={index}>
       {(magic, snapshot) => (
@@ -29,6 +50,7 @@ function DragabbleCard({ toDoId, toDoText, index }: IDragabbleCardProps) {
           {...magic.draggableProps}
         >
           {toDoText}
+          <button onClick={() => onClick(toDoId, magic)}>Del</button>
         </Card>
       )}
     </Draggable>

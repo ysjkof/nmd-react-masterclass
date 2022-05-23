@@ -2,7 +2,7 @@ import { Droppable } from "react-beautiful-dnd";
 import { useForm } from "react-hook-form";
 import { useSetRecoilState } from "recoil";
 import styled from "styled-components";
-import { ITodo, toDoState } from "../atoms";
+import { ITodo, LOCAL_STORAGE_TO_DOS, toDoState } from "../atoms";
 import DragabbleCard from "./DragabbleCard";
 
 const Wrapper = styled.div`
@@ -23,7 +23,7 @@ const Title = styled.h2`
   font-size: 18px;
 `;
 
-interface IAreaProps {
+export interface IAreaProps {
   isDraggingFromThis: boolean;
   isDraggingOver: boolean;
 }
@@ -65,10 +65,12 @@ function Board({ toDos, boardId }: IBoardProps) {
       text: toDo,
     };
     setToDos((allBoards) => {
-      return {
+      const newBoards = {
         ...allBoards,
         [boardId]: [newToDo, ...allBoards[boardId]],
       };
+      localStorage.setItem(LOCAL_STORAGE_TO_DOS, JSON.stringify(newBoards));
+      return newBoards;
     });
     setValue("toDo", "");
   };
@@ -99,6 +101,7 @@ function Board({ toDos, boardId }: IBoardProps) {
                 index={index}
                 toDoId={toDo.id}
                 toDoText={toDo.text}
+                boardId={boardId}
               />
             ))}
             {/* Draggable을 드래그할 때 Droppable가 작아지는 것을 방지함. Draggable의 형제로 렌더링한다 */}
