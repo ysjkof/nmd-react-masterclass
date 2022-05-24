@@ -1,5 +1,6 @@
 import ReactDOM from "react-dom/client";
 import { HelmetProvider } from "react-helmet-async";
+import { QueryClient, QueryClientProvider } from "react-query";
 import { RecoilRoot } from "recoil";
 import { createGlobalStyle, ThemeProvider } from "styled-components";
 import App from "./App";
@@ -60,23 +61,25 @@ table {
  body {
    font-weight: 300;
    font-family: 'Source Sans Pro', sans-serif;
-   color:black;
+   color:${(props) => props.theme.white.darker};
    line-height: 1.2;
-   background:linear-gradient(135deg,#e09,#d0e);
+   background-color: black;
  }
  a {
    text-decoration:none;
   color:inherit;
 }
  `;
-
+const client = new QueryClient();
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <RecoilRoot>
-    <ThemeProvider theme={theme}>
-      <HelmetProvider>
-        <GlobalStyle />
-        <App />
-      </HelmetProvider>
-    </ThemeProvider>
+    <QueryClientProvider client={client}>
+      <ThemeProvider theme={theme}>
+        <HelmetProvider>
+          <GlobalStyle />
+          <App />
+        </HelmetProvider>
+      </ThemeProvider>
+    </QueryClientProvider>
   </RecoilRoot>
 );
